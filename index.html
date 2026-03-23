@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, my Dilara</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream:      #fdf8ef;
+    --warm-white: #fffcf5;
+    --gold:       #c8922a;
+    --gold-light: #e8b84b;
+    --gold-pale:  #f5e4b8;
+    --text-dark:  #2c1a06;
+    --text-mid:   #6b4c1e;
+    --text-soft:  #9c7642;
+    --border:     rgba(200, 146, 42, 0.18);
+    --shadow:     rgba(100, 60, 0, 0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--text-dark);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── GRAIN TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── AMBIENT GLOW ── */
+  .ambient {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .ambient-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(232,184,75,0.12) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    animation: drift1 18s ease-in-out infinite alternate;
+  }
+  .ambient-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,146,42,0.08) 0%, transparent 70%);
+    bottom: -80px; left: -80px;
+    animation: drift2 22s ease-in-out infinite alternate;
+  }
+  @keyframes drift1 { from { transform: translate(0,0); } to { transform: translate(-40px, 30px); } }
+  @keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(30px, -40px); } }
+
+  /* ── FLOATING PARTICLES ── */
+  .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--gold-light);
+    opacity: 0;
+    animation: particleDrift linear infinite;
+  }
+  @keyframes particleDrift {
+    0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10%  { opacity: 0.4; }
+    90%  { opacity: 0.2; }
+    100% { transform: translateY(-10vh) translateX(var(--drift)); opacity: 0; }
+  }
+
+  /* ── MAIN CONTAINER ── */
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    width: 100%;
+    animation: pageIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TOP ORNAMENT ── */
+  .ornament {
+    text-align: center;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeIn 1s ease 0.3s forwards;
+  }
+  .ornament-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+  }
+  .ornament-line::before, .ornament-line::after {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-light));
+  }
+  .ornament-line::after {
+    background: linear-gradient(to left, transparent, var(--gold-light));
+  }
+  .sunflower-icon {
+    font-size: 1.5rem;
+    display: inline-block;
+    margin-top: 14px;
+    animation: slowSpin 20s linear infinite;
+    opacity: 0.85;
+  }
+  @keyframes slowSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 56px 52px 48px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.9) inset,
+      0 24px 64px var(--shadow),
+      0 4px 16px rgba(200,146,42,0.06);
+    opacity: 0;
+    animation: fadeIn 1s ease 0.5s forwards;
+  }
+
+  /* ── HEADER ── */
+  .header { margin-bottom: 36px; }
+
+  .date-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    font-weight: 400;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5.5vw, 3.2rem);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+  }
+
+  h1 .name {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  h1 .heart {
+    display: inline-block;
+    font-size: 0.8em;
+    margin-left: 4px;
+    animation: heartbeat 2.4s ease-in-out infinite;
+    vertical-align: middle;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15%       { transform: scale(1.22); }
+    30%       { transform: scale(1); }
+    45%       { transform: scale(1.12); }
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 28px 0;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider span {
+    color: var(--gold);
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  /* ── TYPING AREA ── */
+  .message-area {
+    min-height: 120px;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 36px;
+  }
+
+  .typed-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+    line-height: 1.85;
+    color: var(--text-mid);
+    font-weight: 300;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 1.5px;
+    height: 1em;
+    background: var(--gold);
+    margin-left: 1px;
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ── BUTTON ── */
+  .btn-wrap {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 0;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 13px 28px;
+    border-radius: 60px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: translateX(-101%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 0;
+    border-radius: 60px;
+  }
+  .btn:hover::before { transform: translateX(0); }
+  .btn:hover { color: var(--warm-white); }
+  .btn span { position: relative; z-index: 1; }
+
+  /* ── SURPRISE SECTION ── */
+  .surprise {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .surprise.open { max-height: 800px; }
+
+  .surprise-inner {
+    padding-top: 36px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+  }
+  .surprise.open .surprise-inner {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .surprise-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .surprise-divider::before, .surprise-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-pale));
+  }
+  .surprise-divider::after {
+    background: linear-gradient(to left, transparent, var(--gold-pale));
+  }
+  .surprise-divider span { font-size: 1rem; opacity: 0.6; }
+
+  .surprise-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    font-weight: 400;
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  .surprise-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 2.5vw, 1.15rem);
+    line-height: 1.9;
+    color: var(--text-mid);
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .surprise-body p { margin-bottom: 16px; }
+  .surprise-body p:last-child { margin-bottom: 0; }
+
+  .surprise-body .highlight {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .surprise-footer {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .signature {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--text-soft);
+    font-style: italic;
+  }
+
+  .sunflower-small {
+    font-size: 1.1rem;
+    opacity: 0.6;
+    display: flex;
+    gap: 6px;
+  }
+
+  /* ── BOTTOM ORNAMENT ── */
+  .bottom-ornament {
+    text-align: center;
+    margin-top: 32px;
+    opacity: 0;
+    animation: fadeIn 1s ease 1s forwards;
+  }
+  .bottom-ornament p {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    opacity: 0.5;
+    font-weight: 300;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 520px) {
+    .card { padding: 40px 28px 36px; border-radius: 18px; }
+    .ornament-line::before,
+    .ornament-line::after { width: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+<div class="particles" id="particles"></div>
+
+<audio id="music" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-lullabyforik.mp3" type="audio/mpeg">
+  <source src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Lullaby%20for%20Erik.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+
+  <div class="ornament">
+    <div class="ornament-line">for you, always</div>
+    <div class="sunflower-icon">🌻</div>
+  </div>
+
+  <div class="card">
+
+    <div class="header">
+      <span class="date-label">A message from the heart</span>
+      <h1>
+        Happy Birthday,<br>
+        my <span class="name">Dilara</span>
+        <span class="heart">❤️</span>
+      </h1>
+    </div>
+
+    <div class="divider"><span>✦</span></div>
+
+    <div class="message-area">
+      <p class="typed-text" id="typedText"><span class="cursor" id="cursor"></span></p>
+    </div>
+
+    <div class="btn-wrap">
+      <button class="btn" id="surpriseBtn" onclick="openSurprise()">
+        <span>Open your surprise 🌻</span>
+      </button>
+    </div>
+
+    <div class="surprise" id="surprise">
+      <div class="surprise-inner">
+        <div class="surprise-divider"><span>🌻</span></div>
+        <span class="surprise-label">only for you</span>
+        <div class="surprise-body">
+          <p>I don't need to be standing in front of you to know that you are someone rare. I hear it in the way you speak — the warmth in your voice, the softness in your laughter — and I know, with every conversation, that what we have is not ordinary.</p>
+          <p>Distance is just geography. But what happens between two people who choose each other, every single day across miles and time zones — <span class="highlight">that is something else entirely.</span></p>
+          <p>One day, I will walk toward you, and all of this — every late call, every good morning, every moment we chose to stay — will finally have a face to put to the feeling.</p>
+          <p>Until then: <span class="highlight">happy birthday, my Dilara.</span> Thank you for existing. Thank you for letting me know you. You deserve every beautiful thing the world holds. 🌻</p>
+        </div>
+        <div class="surprise-footer">
+          <span class="signature">— written with everything I have</span>
+          <div class="sunflower-small"><span>🌻</span><span>🌻</span><span>🌻</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-ornament">
+    <p>made for you &nbsp;·&nbsp; with love</p>
+  </div>
+
+</div>
+
+<script>
+  /* ── PARTICLES ── */
+  (function() {
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const drift = (Math.random() - 0.5) * 120;
+      p.style.cssText = `
+        left: ${Math.random() * 100}%;
+        width: ${1.5 + Math.random() * 2}px;
+        height: ${1.5 + Math.random() * 2}px;
+        --drift: ${drift}px;
+        animation-duration: ${14 + Math.random() * 18}s;
+        animation-delay: ${Math.random() * 16}s;
+        opacity: 0;
+      `;
+      container.appendChild(p);
+    }
+  })();
+
+  /* ── TYPING ENGINE ── */
+  const lines = [
+    "Every morning I wake up knowing I'll hear your voice today.",
+    "That alone makes everything lighter.",
+    "We haven't stood in the same room yet — but I know you, my Dilara.",
+    "I know the way you laugh.",
+    "I know the pauses between your words.",
+    "And I know that the day we finally meet...",
+    "it will feel like I've known you my whole life. 🌻"
+  ];
+
+  let lineIndex = 0, charIndex = 0, displayedLines = [], isWaiting = false;
+  const el = document.getElementById('typedText');
+
+  function buildHTML() {
+    const finished = displayedLines.map(l =>
+      `<span style="display:block;margin-bottom:4px;">${l}</span>`
+    ).join('');
+    const current = lines[lineIndex]
+      ? `<span style="display:block;">${lines[lineIndex].substring(0, charIndex)}<span class="cursor"></span></span>`
+      : '';
+    el.innerHTML = finished + current;
+  }
+
+  function type() {
+    if (isWaiting) return;
+    const current = lines[lineIndex];
+    if (!current) return;
+
+    if (charIndex <= current.length) {
+      buildHTML();
+      charIndex++;
+      const speed = 42 + Math.random() * 28;
+      setTimeout(type, speed);
+    } else {
+      displayedLines.push(current);
+      lineIndex++;
+      charIndex = 0;
+      if (lineIndex < lines.length) {
+        isWaiting = true;
+        setTimeout(() => { isWaiting = false; type(); }, 520);
+      } else {
+        el.innerHTML = displayedLines.map(l =>
+          `<span style="display:block;margin-bottom:4px;">${l}</span>`
+        ).join('');
+      }
+    }
+  }
+
+  setTimeout(type, 1000);
+
+  /* ── SURPRISE ── */
+  function openSurprise() {
+    const box = document.getElementById('surprise');
+    const btn = document.getElementById('surpriseBtn');
+
+    box.classList.add('open');
+
+    btn.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    btn.style.opacity = '0';
+    btn.style.transform = 'translateY(8px)';
+    setTimeout(() => { btn.style.display = 'none'; }, 400);
+
+    // Start music on interaction
+    const music = document.getElementById('music');
+    music.volume = 0.18;
+    music.play().catch(() => {});
+  }
+
+  /* ── MUSIC ON FIRST INTERACTION ── */
+  document.addEventListener('click', () => {
+    const music = document.getElementById('music');
+    if (music.paused) {
+      music.volume = 0.18;
+      music.play().catch(() => {});
+    }
+  }, { once: true });
+</script>
+</body>
+</html>
